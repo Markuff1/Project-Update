@@ -1,0 +1,480 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 16% 10%;
+    --foreground: 210 20% 92%;
+    --card: 220 14% 14%;
+    --card-foreground: 210 20% 92%;
+    --popover: 220 14% 16%;
+    --popover-foreground: 210 20% 92%;
+    --primary: 210 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 20%;
+    --secondary-foreground: 210 20% 85%;
+    --muted: 220 12% 18%;
+    --muted-foreground: 215 15% 55%;
+    --accent: 220 14% 22%;
+    --accent-foreground: 210 20% 92%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 12% 22%;
+    --input: 220 12% 22%;
+    --ring: 210 70% 55%;
+    --radius: 0.5rem;
+
+    --sidebar-background: 220 14% 12%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 210 70% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 18%;
+    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-border: 220 12% 22%;
+    --sidebar-ring: 210 70% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  /* ===== Trust Header ===== */
+  .trust-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 2px solid rgba(70, 130, 210, 0.4);
+  }
+
+  .trust-header--live {
+    background-color: rgba(40, 167, 69, 0.25);
+    border-bottom-color: rgba(40, 167, 69, 0.5);
+  }
+
+  .trust-header--testing {
+    background-color: rgba(230, 160, 0, 0.2);
+    border-bottom-color: rgba(230, 160, 0, 0.5);
+  }
+
+  .trust-header--not-live {
+    background-color: rgba(255, 0, 0, 0.2);
+    border-bottom-color: rgba(192, 0, 0, 0.5);
+  }
+
+  .trust-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .trust-header-fields {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .trust-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: 16px;
+  }
+
+  /* ===== Trust Badges ===== */
+  .trust-badge-live {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: rgba(80, 200, 100, 1);
+    border: 1px solid rgba(40, 167, 69, 0.4);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+  }
+
+  .trust-badge-testing {
+    background-color: rgba(230, 160, 0, 0.2);
+    color: rgba(255, 190, 50, 1);
+    border: 1px solid rgba(230, 160, 0, 0.4);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+  }
+
+  .trust-badge-not-live {
+    background-color: rgba(200, 60, 60, 0.2);
+    color: rgba(230, 100, 100, 1);
+    border: 1px solid rgba(200, 60, 60, 0.4);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+  }
+
+  /* ===== Status Badges (SSA / CRV) ===== */
+  .status-complete {
+    background-color: rgba(40, 167, 69, 0.35);
+    color: rgba(100, 220, 130, 1);
+    border: 1.5px solid rgba(40, 167, 69, 0.6);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(40, 167, 69, 0.3);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    text-align: center;
+  }
+
+  .status-in-progress {
+    background-color: rgba(230, 160, 0, 0.3);
+    color: rgba(255, 190, 50, 1);
+    border: 1.5px solid rgba(230, 160, 0, 0.6);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(230, 160, 0, 0.3);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    text-align: center;
+  }
+
+  .status-not-tested {
+    background-color: rgba(100, 100, 100, 0.3);
+    color: rgba(170, 170, 170, 1);
+    border: 1.5px solid rgba(100, 100, 100, 0.5);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    text-align: center;
+  }
+
+  /* ===== Editable Cell ===== */
+  .editable-cell {
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.15s;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  .editable-cell:hover {
+    background-color: rgba(50, 60, 80, 0.5);
+  }
+
+  .editable-cell--empty {
+    font-style: italic;
+    color: rgba(140, 150, 170, 0.7);
+  }
+
+  .editable-input {
+    width: 100%;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 14px;
+    outline: none;
+    background-color: rgba(30, 35, 50, 0.5);
+    border: 1px solid rgba(70, 130, 210, 0.3);
+    color: rgba(220, 225, 235, 1);
+  }
+
+  .editable-input:focus {
+    border-color: rgba(70, 130, 210, 0.8);
+  }
+
+  /* ===== SSA Table ===== */
+  .ssa-table {
+    width: max-content;   /* 👈 key fix */
+    min-width: 1400px;    /* fallback */
+    table-layout: fixed;
+  }
+
+  .ssa-table-header {
+    background-color: rgba(30, 35, 50, 0.5);
+  }
+
+  .ssa-table-header th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(140, 150, 170, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .ssa-table-row {
+    transition: background-color 0.15s;
+    border-top: 1px solid rgba(50, 55, 70, 0.5);
+  }
+
+  .ssa-table-row:hover {
+    background-color: rgba(50, 60, 80, 0.2);
+  }
+
+  .ssa-table-row--alt {
+    background-color: rgba(30, 35, 50, 0.2);
+  }
+
+  .ssa-table-row td {
+    padding: 6px 12px;
+    vertical-align: top;
+  }
+
+  /* Comment columns - wider with wrapping */
+  .col-crv-comment,
+  .col-general-comments {
+    width: 220px;
+    min-width: 180px;
+
+    word-break: break-word;       /* ✅ ADD */
+    overflow-wrap: anywhere;      /* ✅ ADD */
+  }
+
+  .col-ssa-comment {
+    width: 160px;
+    min-width: 120px;
+  }
+
+  /* Merged cells spanning all SSA rows */
+  .merged-cell {
+    vertical-align: top;
+    border-left: 1px solid rgba(50, 55, 70, 0.4);
+    background-color: rgba(30, 35, 50, 0.15);
+
+    word-break: break-word;       /* ✅ ADD */
+    overflow-wrap: anywhere;      /* ✅ ADD (key fix) */
+    white-space: pre-wrap;        /* ✅ keep line breaks */
+  }
+
+  /* ===== Upload Area ===== */
+  .upload-dropzone {
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.15s;
+    cursor: pointer;
+    border: 2px dashed rgba(50, 55, 70, 0.8);
+    background-color: rgba(30, 35, 50, 0.3);
+  }
+
+  .upload-dropzone:hover {
+    border-color: rgba(70, 130, 210, 0.8);
+    background-color: rgba(70, 130, 210, 0.05);
+  }
+
+  /* ===== Trust Header Stats ===== */
+  .trust-header-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 4px 12px;
+  }
+
+  .trust-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+  }
+
+  .trust-stat-value {
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(220, 225, 235, 1);
+  }
+
+  .trust-stat-label {
+    font-size: 10px;
+    color: rgba(220, 225, 235, 0.6);
+  }
+
+  .trust-stat-divider {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(220, 225, 235, 0.15);
+  }
+
+  /* ===== Misc ===== */
+  .expand-btn {
+    color: rgba(220, 225, 235, 0.7);
+    transition: color 0.15s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .expand-btn:hover {
+    color: rgba(220, 225, 235, 1);
+  }
+
+  .delete-trust-btn {
+    color: rgba(220, 225, 235, 0.4);
+    transition: color 0.15s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+  }
+
+  .delete-trust-btn:hover {
+    color: rgba(220, 80, 80, 1);
+  }
+
+  .delete-ssa-btn {
+    color: rgba(140, 150, 170, 0.4);
+    transition: color 0.15s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 4px;
+  }
+
+  .delete-ssa-btn:hover {
+    color: rgba(220, 80, 80, 1);
+  }
+
+  .add-ssa-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(140, 150, 170, 0.8);
+    transition: color 0.15s;
+    padding: 4px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .add-ssa-btn:hover {
+    color: rgba(70, 130, 210, 1);
+  }
+
+  .link-display {
+    color: rgba(70, 130, 210, 1);
+    font-size: 14px;
+    text-decoration: none;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  .link-display:hover {
+    text-decoration: underline;
+  }
+
+  .link-edit-btn {
+    opacity: 0;
+    color: rgba(140, 150, 170, 0.8);
+    font-size: 12px;
+    margin-left: 4px;
+    transition: opacity 0.15s, color 0.15s;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .link-group:hover .link-edit-btn {
+    opacity: 1;
+  }
+
+  .link-edit-btn:hover {
+    color: rgba(220, 225, 235, 1);
+  }
+
+  .trust-number-field {
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(220, 225, 235, 0.7);
+  }
+
+  .trust-name-field {
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(220, 225, 235, 1);
+  }
+
+  .ssa-number-field {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .add-trust-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(70, 130, 210, 1);
+    color: rgba(255, 255, 255, 1);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .add-trust-btn:hover {
+    opacity: 0.9;
+  }
+
+    /* Force dropdown text to always be visible */
+  select {
+    color: rgba(220, 225, 235, 1);
+    background-color: rgba(30, 35, 50, 0.9);
+  }
+
+  /* Fix dropdown list items */
+  select option {
+    font-weight: 600;
+    text-transform: uppercase;
+    color: black;              /* 👈 IMPORTANT */
+    background-color: white;   /* 👈 IMPORTANT */
+  }
+}
