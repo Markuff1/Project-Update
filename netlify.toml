@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Fix for React/Vite routing (VERY IMPORTANT)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
