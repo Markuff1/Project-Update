@@ -147,7 +147,7 @@ export function TrustCard({
                 <tr key={ssa.id} className={`ssa-table-row ${i % 2 !== 0 ? 'ssa-table-row--alt' : ''}`}>
                   <td>
                     <button onClick={() => onDeleteSSA(ssa.id)} className="delete-ssa-btn" title="Delete SSA">
-                      <Trash2 size={14} />
+                      <Trash2 size={15} />
                     </button>
                   </td>
 

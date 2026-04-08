@@ -127,7 +127,7 @@ export function ExcelUpload({ onImport }: ExcelUploadProps) {
         onClick={() => fileInputRef.current?.click()}
         className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
       >
-        <Upload size={16} /> Upload Excel
+        <Upload size={16} />
       </button>
       <button
         onClick={downloadTemplate}

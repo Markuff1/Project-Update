@@ -6,9 +6,8 @@
 
 @layer base {
   :root {
-    --background: 220 16% 10%;
     --foreground: 210 20% 92%;
-    --card: 220 14% 14%;
+    --card: 220 14% 20%;
     --card-foreground: 210 20% 92%;
     --popover: 220 14% 16%;
     --popover-foreground: 210 20% 92%;
@@ -49,12 +48,27 @@
 }
 
 @layer components {
+
+  .app-container {
+  min-height: 100vh;
+  background: rgb(66, 69, 78);
+  }
+
+  .app-header {
+    border-bottom: 1px solid var(--border);
+    background: rgba(31, 34, 41, 0.75); /* similar to bg-card/50 */
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 2px solid rgb(38, 0, 255);
+  }
   /* ===== Trust Header ===== */
   .trust-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 20px;
+    padding: 15px 30px;
     border-bottom: 2px solid rgba(70, 130, 210, 0.4);
   }
 
@@ -352,7 +366,7 @@
   }
 
   .delete-trust-btn {
-    color: rgba(220, 225, 235, 0.4);
+    color: rgba(255, 255, 255, 0.4);
     transition: color 0.15s;
     background: none;
     border: none;
@@ -366,7 +380,7 @@
   }
 
   .delete-ssa-btn {
-    color: rgba(140, 150, 170, 0.4);
+    color: rgba(255, 255, 255, 0.715);
     transition: color 0.15s;
     background: none;
     border: none;
@@ -449,10 +463,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-left: -10px;
     background-color: rgba(70, 130, 210, 1);
     color: rgba(255, 255, 255, 1);
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 4px;
     font-size: 14px;
     font-weight: 500;
     border: none;
