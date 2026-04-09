@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Trust, SSA, TrustStatus, SSAStatus, CRVStatus } from '@/types/project';
 import { EditableCell } from './EditableCell';
 import { StatusDropdown } from './StatusDropdown';
@@ -6,6 +7,7 @@ import { ChevronDown, ChevronRight, Plus, Trash2 } from 'lucide-react';
 
 interface TrustCardProps {
   trust: Trust;
+  globalExpanded?: boolean;
   onUpdateTrust: (updates: Partial<Trust>) => void;
   onDeleteTrust: () => void;
   onUpdateSSA: (ssaId: string, updates: Partial<SSA>) => void;
@@ -34,12 +36,19 @@ const trustHeaderClass = (status: TrustStatus) => {
 export function TrustCard({
   trust,
   onUpdateTrust,
+  globalExpanded,
   onDeleteTrust,
   onUpdateSSA,
   onAddSSA,
   onDeleteSSA
 }: TrustCardProps) {
   const [expanded, setExpanded] = useState(true);
+
+  useEffect(() => {
+    if (typeof globalExpanded === 'boolean') {
+      setExpanded(globalExpanded);
+    }
+  }, [globalExpanded]);
 
   return (
     <div className="rounded-lg border border-border overflow-hidden bg-card">
@@ -121,7 +130,16 @@ export function TrustCard({
         </div>
       </div>
 
-      {expanded && (
+      {/* ✅ Animated expand/collapse */}
+      <motion.div
+        initial={false}
+        animate={{
+          height: expanded ? 'auto' : 0,
+          opacity: expanded ? 1 : 0
+        }}
+        transition={{ duration: 0.5 }}
+        style={{ overflow: 'hidden' }}
+      >
         <div className="overflow-x-auto">
           <table className="ssa-table">
             <thead>
@@ -134,9 +152,13 @@ export function TrustCard({
                 <th>AD</th>
                 <th>Test Suite</th>
                 <th>Data</th>
+
+                <th>Documents?</th>
+
                 <th style={{ textAlign: 'center' }}>SSA Status</th>
                 <th className="col-ssa-comment">SSA Comment</th>
                 <th style={{ textAlign: 'center' }}>CRV Status</th>
+                <th>CRV URL</th>
                 <th className="col-crv-comment">CRV Comment</th>
                 <th className="col-general-comments">Comments</th>
               </tr>
@@ -165,7 +187,20 @@ export function TrustCard({
                   <td><EditableCell value={ssa.epicLink} onChange={v => onUpdateSSA(ssa.id, { epicLink: v })} isLink placeholder="Add link" /></td>
                   <td><EditableCell value={ssa.adLink} onChange={v => onUpdateSSA(ssa.id, { adLink: v })} isLink placeholder="Add link" /></td>
                   <td><EditableCell value={ssa.testSuiteLink} onChange={v => onUpdateSSA(ssa.id, { testSuiteLink: v })} isLink placeholder="Add link" /></td>
-                  <td><EditableCell value={ssa.data} onChange={v => onUpdateSSA(ssa.id, { data: v })} /></td>
+                  <td><EditableCell value={ssa.data} onChange={v => onUpdateSSA(ssa.id, { data: v })} />
+
+                  </td>
+
+                  <td style={{ textAlign: 'center' }}>
+                    <input
+                      type="checkbox"
+                      className="ssa-checkbox"
+                      checked={ssa.documents || false}
+                      onChange={(e) =>
+                        onUpdateSSA(ssa.id, { documents: e.target.checked })
+                      }
+                    />
+                  </td>
 
                   <td style={{ textAlign: 'center' }}>
                     <StatusDropdown
@@ -188,6 +223,17 @@ export function TrustCard({
                       onChange={v => onUpdateSSA(ssa.id, { crvStatus: v as CRVStatus })}
                     />
                   </td>
+
+                  {i === 0 && (
+                    <td className="merged-cell" rowSpan={trust.ssas.length}>
+                      <EditableCell
+                        value={trust.crvUrl}
+                        onChange={v => onUpdateTrust({ crvUrl: v })}
+                        placeholder="CRV URL"
+                        multiline
+                      />
+                    </td>
+                  )}
 
                   {i === 0 && (
                     <td className="merged-cell" rowSpan={trust.ssas.length}>
@@ -221,7 +267,7 @@ export function TrustCard({
             </button>
           </div>
         </div>
-      )}
+      </motion.div>
     </div>
   );
 }

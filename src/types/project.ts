@@ -11,6 +11,7 @@ export interface SSA {
   adLink: string;
   testSuiteLink: string;
   data: string;
+  documents?: boolean; 
   ssaStatus: SSAStatus;
   ssaComment: string;
   crvStatus: CRVStatus;
@@ -18,10 +19,12 @@ export interface SSA {
 
 export interface Trust {
   id: string;
+  globalExpanded?: boolean;
   trustName: string;
   trustNumber: string;
   trustStatus: TrustStatus;
   crvComment: string;
   generalComments: string;
+  crvUrl?: string; 
   ssas: SSA[];
 }

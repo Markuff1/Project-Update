@@ -29,18 +29,17 @@ function downloadTemplate() {
     'Trust Name', 'Trust Number', 'Trust Status',
     'SSA Number', 'SSA Name', 'Source System',
     'Epic Link', 'AD Link', 'Test Suite Link', 'Data',
+    'Documents', // ✅ NEW
     'SSA Status', 'SSA Comment', 'CRV Status', 'CRV Comment', 'General Comments'
   ];
 
   const sampleRows = [
-    ['Example Trust', 'T001', 'Live', 'SSA-001', 'First SSA', 'System A', '', '', '', '', 'Complete', '', 'In Progress', '', 'Sample comment'],
-    ['Example Trust', 'T001', 'Live', 'SSA-002', 'Second SSA', 'System B', '', '', '', '', 'Not Tested', '', 'Not Tested', '', ''],
-    ['Another Trust', 'T002', 'Not Live', 'SSA-003', 'Third SSA', 'System C', '', '', '', '', 'In Progress', 'WIP', 'Not Tested', '', ''],
+    ['Example Trust', 'T001', 'Live', 'SSA-001', 'First SSA', 'System A', '', '', '', '', 'Yes', 'Complete', '', 'In Progress', '', 'Sample comment'],
+    ['Example Trust', 'T001', 'Live', 'SSA-002', 'Second SSA', 'System B', '', '', '', '', 'No', 'Not Tested', '', 'Not Tested', '', ''],
   ];
 
   const ws = XLSX.utils.aoa_to_sheet([headers, ...sampleRows]);
 
-  // Set column widths
   ws['!cols'] = headers.map(h => ({ wch: Math.max(h.length + 2, 14) }));
 
   const wb = XLSX.utils.book_new();
@@ -63,31 +62,39 @@ function parseExcelData(data: ArrayBuffer): Trust[] {
       trustMap.set(trustKey, {
         id: generateId(),
         trustName: trustKey,
-        trustNumber: String(row['Trust Number'] || row['Trust number'] || ''),
-        trustStatus: validTrustStatus(String(row['Trust Status'] || row['Trust status'] || '')),
-        crvComment: String(row['CRV Comment'] || row['CRV comment'] || ''),
-        generalComments: String(row['General Comments'] || row['General comments'] || row['Comments'] || ''),
+        trustNumber: String(row['Trust Number'] || ''),
+        trustStatus: validTrustStatus(String(row['Trust Status'] || '')),
+        crvComment: String(row['CRV Comment'] || ''),
+        generalComments: String(row['General Comments'] || row['Comments'] || ''),
         ssas: [],
       });
     }
 
     const trust = trustMap.get(trustKey)!;
-    const ssaName = row['SSA Name'] || row['SSA name'] || '';
+    const ssaName = row['SSA Name'] || '';
 
-    if (ssaName || row['SSA Number'] || row['SSA number']) {
+    if (ssaName || row['SSA Number']) {
+      const documentsRaw = String(row['Documents'] || '');
+      const documents = documentsRaw.toLowerCase() === 'yes' || documentsRaw === 'true';
+
       const ssa: SSA = {
         id: generateId(),
-        ssaNumber: String(row['SSA Number'] || row['SSA number'] || ''),
+        ssaNumber: String(row['SSA Number'] || ''),
         ssaName: String(ssaName),
-        sourceSystem: String(row['Source System'] || row['Source system'] || ''),
-        epicLink: String(row['Epic Link'] || row['Epic link'] || ''),
-        adLink: String(row['AD Link'] || row['AD link'] || ''),
-        testSuiteLink: String(row['Test Suite Link'] || row['Test suite link'] || ''),
+        sourceSystem: String(row['Source System'] || ''),
+        epicLink: String(row['Epic Link'] || ''),
+        adLink: String(row['AD Link'] || ''),
+        testSuiteLink: String(row['Test Suite Link'] || ''),
         data: String(row['Data'] || ''),
-        ssaStatus: validSSAStatus(String(row['SSA Status'] || row['SSA status'] || '')),
-        ssaComment: String(row['SSA Comment'] || row['SSA comment'] || ''),
-        crvStatus: validCRVStatus(String(row['CRV Status'] || row['CRV status'] || '')),
+
+        // ✅ NEW FIELD
+        documents,
+
+        ssaStatus: validSSAStatus(String(row['SSA Status'] || '')),
+        ssaComment: String(row['SSA Comment'] || ''),
+        crvStatus: validCRVStatus(String(row['CRV Status'] || '')),
       };
+
       trust.ssas.push(ssa);
     }
   }
@@ -123,12 +130,14 @@ export function ExcelUpload({ onImport }: ExcelUploadProps) {
           e.target.value = '';
         }}
       />
+
       <button
         onClick={() => fileInputRef.current?.click()}
         className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
       >
         <Upload size={16} />
       </button>
+
       <button
         onClick={downloadTemplate}
         className="flex items-center gap-2 border border-border text-muted-foreground px-4 py-2 rounded-md text-sm font-medium hover:text-foreground hover:border-foreground/30 transition-colors"

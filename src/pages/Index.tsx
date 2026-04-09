@@ -19,6 +19,7 @@ const Index = () => {
   } = useProjectData();
 
   const [showHelp, setShowHelp] = useState(false);
+  const [globalExpanded, setGlobalExpanded] = useState(true);
 
   if (loading) {
     return (
@@ -45,12 +46,23 @@ const Index = () => {
     t => t.trustStatus === 'Customer Testing'
   ).length;
 
+  const handleAddTrust = () => {
+  addTrust();
+
+  setTimeout(() => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  }, 100);
+};
+
   return (
     <div className="app-container">
       <header className="app-header">
         <div
           style={{
-            maxWidth: 1600,
+            maxWidth: 2000,
             margin: '0 auto',
             padding: '16px 24px',
             display: 'flex',
@@ -152,18 +164,26 @@ const Index = () => {
 
             <ExcelUpload onImport={importTrusts} />
 
-            <button onClick={addTrust} className="add-trust-btn">
-              <Plus size={16} />
+            <button onClick={handleAddTrust} className="add-trust-btn">
+              <Plus size={20} />
             </button>
 
             <button onClick={() => setShowHelp(true)} className="add-trust-btn">
-              <HelpCircle size={16} />
+              <HelpCircle size={20} />
+            </button>
+
+            <button
+              onClick={() => setGlobalExpanded(prev => !prev)}
+              className="add-trust-btn"
+              title={globalExpanded ? "Collapse all trusts" : "Expand all trusts"}
+            >
+              {globalExpanded ? "Collapse" : "Expand"}
             </button>
           </div>
         </div>
       </header>
 
-      <main style={{ maxWidth: 1600, margin: '0 auto', padding: '24px 24px' }}>
+      <main style={{ maxWidth: 2150, margin: '0 auto', padding: '24px 24px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {trusts.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '80px 0' }}>
@@ -183,7 +203,7 @@ const Index = () => {
                   gap: 12
                 }}
               >
-                <button onClick={addTrust} className="add-trust-btn">
+                <button onClick={addTrust} className="add-trust-btn" title="Add a new trust">
                   Add Trust
                 </button>
                 <ExcelUpload onImport={importTrusts} />
@@ -194,6 +214,7 @@ const Index = () => {
               <TrustCard
                 key={trust.id}
                 trust={trust}
+                globalExpanded={globalExpanded}
                 onUpdateTrust={updates => updateTrust(trust.id, updates)}
                 onDeleteTrust={() => deleteTrust(trust.id)}
                 onUpdateSSA={(ssaId, updates) =>

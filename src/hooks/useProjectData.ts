@@ -24,6 +24,8 @@ const createEmptySSA = (): SSA => ({
   adLink: '',
   testSuiteLink: '',
   data: '',
+  documents: false,
+
   ssaStatus: 'Not Tested',
   ssaComment: '',
   crvStatus: 'Not Tested',
@@ -48,6 +50,7 @@ export function useProjectData() {
     const unsub = onSnapshot(collection(db, COLLECTION), (snapshot) => {
       const data: Trust[] = snapshot.docs.map(d => {
         const raw = d.data();
+
         return {
           id: d.id,
           trustName: raw.trustName || raw.name || 'Untitled',
@@ -55,15 +58,25 @@ export function useProjectData() {
           trustStatus: raw.trustStatus || (raw.live ? 'Live' : 'Not Live'),
           crvComment: raw.crvComment || '',
           generalComments: raw.generalComments || '',
-          ssas: Array.isArray(raw.ssas) ? raw.ssas : [createEmptySSA()],
+
+          ssas: Array.isArray(raw.ssas)
+            ? raw.ssas.map((s: any) => ({
+                ...s,
+                // ✅ Ensure defaults for old data
+                documents: s.documents ?? false,
+                crvUrl: s.crvUrl ?? '',
+              }))
+            : [createEmptySSA()],
         } as Trust;
       });
+
       // Sort trusts by trust number numerically
       data.sort((a, b) => {
         const numA = parseInt(a.trustNumber, 10) || Infinity;
         const numB = parseInt(b.trustNumber, 10) || Infinity;
         return numA - numB;
       });
+
       // Sort SSAs within each trust by SSA number
       data.forEach(t => {
         t.ssas.sort((a, b) => {
@@ -72,9 +85,11 @@ export function useProjectData() {
           return numA - numB;
         });
       });
+
       setTrusts(data);
       setLoading(false);
     });
+
     return unsub;
   }, []);
 
@@ -100,11 +115,16 @@ export function useProjectData() {
     setTrusts(prev => {
       const updated = prev.map(t => {
         if (t.id !== trustId) return t;
-        return { ...t, ssas: t.ssas.map(s => s.id === ssaId ? { ...s, ...updates } : s) };
+        return {
+          ...t,
+          ssas: t.ssas.map(s => s.id === ssaId ? { ...s, ...updates } : s)
+        };
       });
+
       // Write full trust doc to Firestore
       const trust = updated.find(t => t.id === trustId);
       if (trust) setDoc(doc(db, COLLECTION, trustId), trust);
+
       return updated;
     });
   }, []);
@@ -115,8 +135,10 @@ export function useProjectData() {
         if (t.id !== trustId) return t;
         return { ...t, ssas: [...t.ssas, createEmptySSA()] };
       });
+
       const trust = updated.find(t => t.id === trustId);
       if (trust) setDoc(doc(db, COLLECTION, trustId), trust);
+
       return updated;
     });
   }, []);
@@ -127,8 +149,10 @@ export function useProjectData() {
         if (t.id !== trustId) return t;
         return { ...t, ssas: t.ssas.filter(s => s.id !== ssaId) };
       });
+
       const trust = updated.find(t => t.id === trustId);
       if (trust) setDoc(doc(db, COLLECTION, trustId), trust);
+
       return updated;
     });
   }, []);
