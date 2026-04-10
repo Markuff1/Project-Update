@@ -118,13 +118,16 @@ export function TrustCard({
               </select>
             </div>
 
-            <EditableCell
-              value={trust.ConflLink}
-              onChange={v => onUpdateTrust({ ConflLink: v })}
-              isLink
-              linkLabel="Confluence"
-              placeholder="Confluence URL"
-            />
+            <div className={`pill-select ${!trust.ConflLink ? 'pill-select--empty' : ''}`}>
+              <EditableCell
+                value={trust.ConflLink}
+                onChange={v => onUpdateTrust({ ConflLink: v })}
+                isLink
+                linkLabel="Confluence"
+                placeholder="Confluence"
+                className="pill-link-cell"
+              />
+            </div>
 
             <select
               value={trust.trustStatus}

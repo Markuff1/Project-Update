@@ -101,7 +101,7 @@
     align-items: center;
     gap: 10px;
     flex: 2;
-    min-width: 0;
+    max-width: 500px;
     overflow: hidden;
   }
 
@@ -315,13 +315,15 @@
     border-color: rgba(70, 130, 210, 0.8);
   }
 
-  .pill-select {
-    display: flex;
+    .pill-select {
+    display: inline-flex;
     align-items: center;
     gap: 6px;
 
-    padding: 6px 10px;
-    border-radius: 999px; /* 🔥 makes it pill shaped */
+    padding: 4px 10px;
+    height: 28px;
+
+    border-radius: 999px;
 
     background-color: rgba(0, 68, 255, 0.406);
     border: 1px solid rgb(0, 51, 255);
@@ -329,35 +331,47 @@
     font-size: 13px;
     white-space: nowrap;
   }
- 
-  /* Label text (PM is / Tech Lead is) */
+
+  /* Label text */
   .pill-label {
     color: rgba(255, 255, 255, 0.8);
     font-weight: 500;
   }
 
-  /* Dropdown inside pill */
+  /* Dropdown */
   .pill-dropdown {
     background: transparent;
     border: none;
     outline: none;
+
     color: rgba(220, 225, 235, 1);
     text-transform: uppercase;
+
     font-size: 13px;
     font-weight: 900;
+
     cursor: pointer;
+
+    height: 100%;
   }
 
+  /* Hover */
   .pill-select:hover {
-  background-color: rgba(70, 130, 210, 0.25);
+    background-color: rgba(70, 130, 210, 0.25);
   }
 
-    /* 🔽 EMPTY STATE (when no value selected) */
+  /* ========================= */
+  /* EMPTY STATE */
+  /* ========================= */
+
   .pill-select--empty {
-    padding: 2px 2px; /* smaller pill */
-    background-color: rgba(107, 107, 107, 0.1);
-    border: 1px solid rgba(155, 155, 155, 0.2);
-    opacity: 0.7;
+    padding: 2px 6px;
+    height: 24px;
+
+    background-color: rgba(107, 107, 107, 0.15); /* 👈 slightly stronger */
+    border: 1px solid rgba(155, 155, 155, 0.3);
+
+    opacity: 1; /* ❗ IMPORTANT: remove global dimming */
   }
 
   /* Dim label */
@@ -365,9 +379,62 @@
     color: rgba(255, 255, 255, 0.5);
   }
 
-  /* Dim dropdown text */
+  /* Dim dropdown */
   .pill-select--empty .pill-dropdown {
     color: rgba(180, 185, 200, 0.7);
+  }
+
+  /* ========================= */
+  /* LINK SUPPORT */
+  /* ========================= */
+
+  /* Container fix */
+  .pill-link-cell {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    height: 100%;
+  }
+
+  /* Kill EditableCell default styling */
+  .pill-link-cell.editable-cell {
+    padding: 0;
+    margin: 0;
+    min-height: unset;
+    background: transparent;
+  }
+
+  /* Link styling */
+  .pill-link-cell .link-display {
+    display: inline-block;
+
+    max-width: 100px;
+
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    line-height: 1;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ✅ KEY FIX: placeholder (span) when EMPTY */
+  .pill-select--empty .editable-cell--empty {
+    color: rgba(180, 185, 200, 0.7);
+    font-style: normal; /* optional: removes italic */
+  }
+
+  /* Link when present but empty styling applied */
+  .pill-select--empty .pill-link-cell .link-display {
+    color: rgba(180, 185, 200, 0.7);
+  }
+
+  /* Hover polish */
+  .pill-select:hover .link-display {
+    color: rgb(113, 170, 255);
   }
 
   /* ===== SSA Table ===== */
