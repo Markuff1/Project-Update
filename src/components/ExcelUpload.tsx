@@ -26,16 +26,74 @@ const validTrustStatus = (v: string): TrustStatus => {
 
 function downloadTemplate() {
   const headers = [
-    'Trust Name', 'Trust Number', 'Trust Status',
-    'SSA Number', 'SSA Name', 'Source System',
-    'Epic Link', 'AD Link', 'Test Suite Link', 'Data',
-    'Documents', // ✅ NEW
-    'SSA Status', 'SSA Comment', 'CRV Status', 'CRV Comment', 'General Comments'
+    'Trust Name',
+    'Trust Number',
+    'Trust Status',
+    'PM',
+    'TL',
+    'Confluence Link',
+    
+
+    'SSA Number',
+    'SSA Name',
+    'Source System',
+    'Epic Link',
+    'AD Link',
+    'Test Suite Link',
+    'Data',
+    'Documents',
+    'SSA Status',
+    'SSA Comment',
+    'CRV Status',
+    'CRV Comment',
+    'General Comments'
   ];
 
   const sampleRows = [
-    ['Example Trust', 'T001', 'Live', 'SSA-001', 'First SSA', 'System A', '', '', '', '', 'Yes', 'Complete', '', 'In Progress', '', 'Sample comment'],
-    ['Example Trust', 'T001', 'Live', 'SSA-002', 'Second SSA', 'System B', '', '', '', '', 'No', 'Not Tested', '', 'Not Tested', '', ''],
+    [
+      'Example Trust',
+      'T001',
+      'Live',
+      'John Smith',
+      'Sarah Jones',
+      '',
+
+      'SSA-001',
+      'First SSA',
+      'System A',
+      '',
+      '',
+      '',
+      '',
+      'Yes',
+      'Complete',
+      '',
+      'In Progress',
+      '',
+      'Sample comment'
+    ],
+    [
+      'Example Trust',
+      'T001',
+      'Live',
+      'John Smith',
+      'Sarah Jones',
+      '',
+
+      'SSA-002',
+      'Second SSA',
+      'System B',
+      '',
+      '',
+      '',
+      '',
+      'No',
+      'Not Tested',
+      '',
+      'Not Tested',
+      '',
+      ''
+    ]
   ];
 
   const ws = XLSX.utils.aoa_to_sheet([headers, ...sampleRows]);
@@ -55,7 +113,7 @@ function parseExcelData(data: ArrayBuffer): Trust[] {
   const trustMap = new Map<string, Trust>();
 
   for (const row of rows) {
-    const trustKey = row['Trust Name'] || row['Trust name'] || '';
+    const trustKey = row['Trust Name'] || '';
     if (!trustKey) continue;
 
     if (!trustMap.has(trustKey)) {
@@ -64,15 +122,23 @@ function parseExcelData(data: ArrayBuffer): Trust[] {
         trustName: trustKey,
         trustNumber: String(row['Trust Number'] || ''),
         trustStatus: validTrustStatus(String(row['Trust Status'] || '')),
+
+        // ✅ NEW TRUST FIELDS
+        PM: String(row['PM'] || ''),
+        TL: String(row['TL'] || ''),
+        ConflLink: String(row['Confluence Link'] || ''),
+
+        crvUrl: String(row['CRV URL'] || ''),
         crvComment: String(row['CRV Comment'] || ''),
         generalComments: String(row['General Comments'] || row['Comments'] || ''),
+
         ssas: [],
       });
     }
 
     const trust = trustMap.get(trustKey)!;
-    const ssaName = row['SSA Name'] || '';
 
+    const ssaName = row['SSA Name'] || '';
     if (ssaName || row['SSA Number']) {
       const documentsRaw = String(row['Documents'] || '');
       const documents = documentsRaw.toLowerCase() === 'yes' || documentsRaw === 'true';
@@ -86,8 +152,6 @@ function parseExcelData(data: ArrayBuffer): Trust[] {
         adLink: String(row['AD Link'] || ''),
         testSuiteLink: String(row['Test Suite Link'] || ''),
         data: String(row['Data'] || ''),
-
-        // ✅ NEW FIELD
         documents,
 
         ssaStatus: validSSAStatus(String(row['SSA Status'] || '')),
@@ -110,9 +174,7 @@ export function ExcelUpload({ onImport }: ExcelUploadProps) {
     reader.onload = (e) => {
       const data = e.target?.result as ArrayBuffer;
       const trusts = parseExcelData(data);
-      if (trusts.length > 0) {
-        onImport(trusts);
-      }
+      if (trusts.length > 0) onImport(trusts);
     };
     reader.readAsArrayBuffer(file);
   };
@@ -131,10 +193,7 @@ export function ExcelUpload({ onImport }: ExcelUploadProps) {
         }}
       />
 
-      <button
-        onClick={downloadTemplate}
-        className="download-temp-btn"
-      >
+      <button onClick={downloadTemplate} className="download-temp-btn">
         <Download size={16} />
         Template
       </button>
@@ -145,7 +204,6 @@ export function ExcelUpload({ onImport }: ExcelUploadProps) {
       >
         <Upload size={20} />
       </button>
-
     </div>
   );
 }

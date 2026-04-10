@@ -25,7 +25,6 @@ const createEmptySSA = (): SSA => ({
   testSuiteLink: '',
   data: '',
   documents: false,
-
   ssaStatus: 'Not Tested',
   ssaComment: '',
   crvStatus: 'Not Tested',
@@ -36,7 +35,11 @@ const createEmptyTrust = (): Trust => ({
   trustName: 'New Trust',
   trustNumber: '',
   trustStatus: 'Not Live',
+  PM: '',
+  TL: '',
+  ConflLink: '',
   crvComment: '',
+  crvUrl:'',
   generalComments: '',
   ssas: [createEmptySSA()],
 });
@@ -57,7 +60,11 @@ export function useProjectData() {
           trustNumber: raw.trustNumber || String(raw.number || ''),
           trustStatus: raw.trustStatus || (raw.live ? 'Live' : 'Not Live'),
           crvComment: raw.crvComment || '',
+          crvUrl: raw.crvUrl || '',
           generalComments: raw.generalComments || '',
+          PM: raw.PM || '',
+          TL: raw.TL || '',
+          ConflLink: raw.ConflLink || '',
 
           ssas: Array.isArray(raw.ssas)
             ? raw.ssas.map((s: any) => ({

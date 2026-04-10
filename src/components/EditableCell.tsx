@@ -3,19 +3,33 @@ import { useState, useRef, useEffect } from 'react';
 interface EditableCellProps {
   value: string;
   onChange: (value: string) => void;
-  isLink?: boolean;
+
   placeholder?: string;
   className?: string;
-  multiline?: boolean; // 👈 NEW
+
+  multiline?: boolean;
+
+  prefix?: string;
+  suffix?: string;
+  formatDisplay?: (value: string) => string;
+
+  isLink?: boolean;
+  linkLabel?: string;
 }
 
 export function EditableCell({
   value,
   onChange,
-  isLink = false,
   placeholder = '—',
   className = '',
-  multiline = false // 👈 NEW
+  multiline = false,
+
+  prefix,
+  suffix,
+  formatDisplay,
+
+  isLink = false,
+  linkLabel
 }: EditableCellProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
@@ -38,6 +52,14 @@ export function EditableCell({
     if (draft !== value) onChange(draft);
   };
 
+  const formatted =
+    formatDisplay && value ? formatDisplay(value) : value;
+
+  const displayText =
+    value
+      ? `${prefix || ''}${formatted}${suffix || ''}`
+      : placeholder;
+
   if (editing) {
     if (multiline) {
       return (
@@ -47,7 +69,6 @@ export function EditableCell({
           onChange={e => setDraft(e.target.value)}
           onBlur={commit}
           onKeyDown={e => {
-            // ✅ Allow Enter to create new line
             if (e.key === 'Escape') {
               setDraft(value);
               setEditing(false);
@@ -55,11 +76,6 @@ export function EditableCell({
           }}
           className={`editable-input ${className}`}
           rows={3}
-          style={{
-            width: '100%',
-            resize: 'vertical',
-            whiteSpace: 'pre-wrap'
-          }}
         />
       );
     }
@@ -71,7 +87,7 @@ export function EditableCell({
         onChange={e => setDraft(e.target.value)}
         onBlur={commit}
         onKeyDown={e => {
-          if (e.key === 'Enter') commit(); // ✅ only for single line
+          if (e.key === 'Enter') commit();
           if (e.key === 'Escape') {
             setDraft(value);
             setEditing(false);
@@ -82,37 +98,54 @@ export function EditableCell({
     );
   }
 
-  if (isLink && value) {
-    return (
-      <div className="link-group" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <a
-          href={value.startsWith('http') ? value : `https://${value}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="link-display"
-          title={value}
-        >
-          Link ↗
-        </a>
-        <button onClick={() => setEditing(true)} className="link-edit-btn" title="Edit">
-          ✎
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div
-      onClick={() => setEditing(true)}
       className={`editable-cell ${!value ? 'editable-cell--empty' : ''} ${className}`}
+      onClick={() => setEditing(true)}
       title="Click to edit"
       style={{
-        whiteSpace: multiline ? 'pre-wrap' : 'normal',
-        wordBreak: 'break-word',
-        overflowWrap: 'anywhere'
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6
       }}
     >
-      {value || placeholder}
+      {/* EMPTY STATE */}
+      {!value ? (
+        <span className="editable-cell--empty">
+          {placeholder}
+        </span>
+      ) : (
+        <>
+          {/* LINK MODE */}
+          {isLink ? (
+            <>
+              <a
+                href={value.startsWith('http') ? value : `https://${value}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-display"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {linkLabel || displayText}
+              </a>
+
+              {/* ✏️ EDIT BUTTON ONLY WHEN VALUE EXISTS */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditing(true);
+                }}
+                className="link-edit-btn"
+                title="Edit"
+              >
+                ✎
+              </button>
+            </>
+          ) : (
+            <span>{displayText}</span>
+          )}
+        </>
+      )}
     </div>
   );
 }

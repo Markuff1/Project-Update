@@ -15,6 +15,9 @@ interface TrustCardProps {
   onDeleteSSA: (ssaId: string) => void;
 }
 
+const PM_OPTIONS = ['Channa Punchihewa','Lee McGovern'];
+const TL_OPTIONS = ['Stuart Lawrie','Simon Haynes'];
+
 const trustStatusOptions: TrustStatus[] = ['Live', 'Customer Testing', 'Not Live'];
 
 const trustBadgeClass = (status: TrustStatus) => {
@@ -31,6 +34,12 @@ const trustHeaderClass = (status: TrustStatus) => {
     case 'Customer Testing': return 'trust-header--testing';
     case 'Not Live': return 'trust-header--not-live';
   }
+};
+
+const formatJiraKey = (url: string) => {
+  if (!url) return '';
+  const match = url.match(/\/browse\/([^/?#]+)/);
+  return match ? match[1] : url;
 };
 
 export function TrustCard({
@@ -58,7 +67,8 @@ export function TrustCard({
             {expanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
           </button>
 
-          <div className="trust-header-fields">
+          {/* LEFT CORE */}
+          <div className="trust-core-fields">
             <div className="flex-shrink-0">
               <EditableCell
                 value={trust.trustNumber}
@@ -76,6 +86,45 @@ export function TrustCard({
                 className="trust-name-field"
               />
             </div>
+          </div>
+
+          {/* RIGHT META (still LEFT section, before stats) */}
+          <div className="trust-meta-fields">
+            <div className="pill-select">
+              <span className="pill-label">PM:</span>
+              <select
+                value={trust.PM || ''}
+                onChange={(e) => onUpdateTrust({ PM: e.target.value })}
+                className="pill-dropdown"
+              >
+                <option value="">Select</option>
+                {PM_OPTIONS.map(pm => (
+                  <option key={pm} value={pm}>{pm}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="pill-select">
+              <span className="pill-label">Tech Lead:</span>
+              <select
+                value={trust.TL || ''}
+                onChange={(e) => onUpdateTrust({ TL: e.target.value })}
+                className="pill-dropdown"
+              >
+                <option value="">Select</option>
+                {TL_OPTIONS.map(tl => (
+                  <option key={tl} value={tl}>{tl}</option>
+                ))}
+              </select>
+            </div>
+
+            <EditableCell
+              value={trust.ConflLink}
+              onChange={v => onUpdateTrust({ ConflLink: v })}
+              isLink
+              linkLabel="Confluence"
+              placeholder="Confluence URL"
+            />
 
             <select
               value={trust.trustStatus}
@@ -130,7 +179,6 @@ export function TrustCard({
         </div>
       </div>
 
-      {/* ✅ Animated expand/collapse */}
       <motion.div
         initial={false}
         animate={{
@@ -152,13 +200,11 @@ export function TrustCard({
                 <th>AD</th>
                 <th>Test Suite</th>
                 <th>Data</th>
-
                 <th>Documents?</th>
-
                 <th style={{ textAlign: 'center' }}>SSA Status</th>
                 <th className="col-ssa-comment">SSA Comment</th>
                 <th style={{ textAlign: 'center' }}>CRV Status</th>
-                <th>CRV URL</th>
+                <th className="col-crv-comment">CRV URL</th>
                 <th className="col-crv-comment">CRV Comment</th>
                 <th className="col-general-comments">Comments</th>
               </tr>
@@ -182,13 +228,49 @@ export function TrustCard({
                     />
                   </td>
 
-                  <td><EditableCell value={ssa.ssaName} onChange={v => onUpdateSSA(ssa.id, { ssaName: v })} /></td>
-                  <td><EditableCell value={ssa.sourceSystem} onChange={v => onUpdateSSA(ssa.id, { sourceSystem: v })} /></td>
-                  <td><EditableCell value={ssa.epicLink} onChange={v => onUpdateSSA(ssa.id, { epicLink: v })} isLink placeholder="Add link" /></td>
-                  <td><EditableCell value={ssa.adLink} onChange={v => onUpdateSSA(ssa.id, { adLink: v })} isLink placeholder="Add link" /></td>
-                  <td><EditableCell value={ssa.testSuiteLink} onChange={v => onUpdateSSA(ssa.id, { testSuiteLink: v })} isLink placeholder="Add link" /></td>
-                  <td><EditableCell value={ssa.data} onChange={v => onUpdateSSA(ssa.id, { data: v })} />
+                  <td>
+                    <EditableCell value={ssa.ssaName} onChange={v => onUpdateSSA(ssa.id, { ssaName: v })} />
+                  </td>
 
+                  <td>
+                    <EditableCell value={ssa.sourceSystem} onChange={v => onUpdateSSA(ssa.id, { sourceSystem: v })} />
+                  </td>
+
+                  {/* Epic */}
+                  <td>
+                    <EditableCell
+                      value={ssa.epicLink}
+                      onChange={v => onUpdateSSA(ssa.id, { epicLink: v })}
+                      isLink
+                      linkLabel={ssa.epicLink ? formatJiraKey(ssa.epicLink) : 'Epic'}
+                      placeholder="Add link"
+                    />
+                  </td>
+
+                  {/* AD */}
+                  <td style={{ textAlign: 'center' }}>
+                    <EditableCell
+                      value={ssa.adLink}
+                      onChange={v => onUpdateSSA(ssa.id, { adLink: v })}
+                      isLink
+                      linkLabel="AD"
+                      placeholder="Add link"
+                    />
+                  </td>
+
+                  {/* Test Suite */}
+                  <td>
+                    <EditableCell
+                      value={ssa.testSuiteLink}
+                      onChange={v => onUpdateSSA(ssa.id, { testSuiteLink: v })}
+                      isLink
+                      linkLabel="Test Suite"
+                      placeholder="Add link"
+                    />
+                  </td>
+
+                  <td>
+                    <EditableCell value={ssa.data} onChange={v => onUpdateSSA(ssa.id, { data: v })} />
                   </td>
 
                   <td style={{ textAlign: 'center' }}>
@@ -196,9 +278,7 @@ export function TrustCard({
                       type="checkbox"
                       className="ssa-checkbox"
                       checked={ssa.documents || false}
-                      onChange={(e) =>
-                        onUpdateSSA(ssa.id, { documents: e.target.checked })
-                      }
+                      onChange={e => onUpdateSSA(ssa.id, { documents: e.target.checked })}
                     />
                   </td>
 

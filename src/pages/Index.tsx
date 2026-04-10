@@ -3,6 +3,7 @@ import { useProjectData } from '@/hooks/useProjectData';
 import { TrustCard } from '@/components/TrustCard';
 import { ExcelUpload } from '@/components/ExcelUpload';
 import { Plus, HelpCircle } from 'lucide-react';
+import { downloadExcel } from '@/components/ExcelExport';
 
 const Index = () => {
   const {
@@ -120,7 +121,14 @@ const Index = () => {
               </span>
             </div>
 
-            <ExcelUpload onImport={importTrusts} />
+            {/*<ExcelUpload onImport={importTrusts} />*/}
+
+            <button
+              onClick={() => downloadExcel(trusts)}
+              className="general-btn"
+            >
+              Download
+            </button>
 
             <button onClick={handleAddTrust} className="general-btn">
               <Plus size={20} />

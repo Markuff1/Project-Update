@@ -7,7 +7,7 @@
 @layer base {
   :root {
     --foreground: 210 20% 92%;
-    --card: 220 14% 20%;
+    --card: 210 15% 20%;
     --card-foreground: 210 20% 92%;
     --popover: 220 14% 16%;
     --popover-foreground: 210 20% 92%;
@@ -51,7 +51,7 @@
 
   .app-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, rgb(37, 37, 37), rgb(37, 44, 64), rgb(19, 26, 47));
+  background: linear-gradient(180deg, rgb(22, 25, 40), rgb(37, 44, 64), rgb(19, 26, 47));
   }
 
   .app-header {
@@ -86,29 +86,50 @@
     background-color: rgba(255, 0, 0, 0.2);
     border-bottom-color: rgba(192, 0, 0, 0.5);
   }
-
   .trust-header-left {
     display: flex;
     align-items: center;
     gap: 16px;
     flex: 1;
     min-width: 0;
+    flex-wrap: nowrap;
   }
 
-  .trust-header-fields {
+  /* LEFT: Trust number + name */
+  .trust-core-fields {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex: 1;
+    gap: 10px;
+    flex: 2;
     min-width: 0;
+    overflow: hidden;
   }
 
+  /* RIGHT: PM / TL / Confluence */
+  .trust-meta-fields {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1.5;
+    justify-content: flex-end;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* RIGHT SIDE (buttons / status / etc) */
   .trust-header-right {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-left: 16px;
+    flex-shrink: 0;
   }
+
+  /* Keep Confluence link clean */
+  .trust-meta-fields a {
+    flex-shrink: 0;
+  }
+
 
     .general-btn {
     display: flex;
@@ -252,7 +273,7 @@
     transition: background-color 0.15s;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    white-space: normal;
+    white-space: pre-wrap;
   }
 
   .editable-cell:hover {
@@ -279,6 +300,43 @@
     border-color: rgba(70, 130, 210, 0.8);
   }
 
+  .pill-select {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 4px 12px;
+    border-radius: 999px; /* 🔥 makes it pill shaped */
+
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.800);
+
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* Label text (PM is / Tech Lead is) */
+  .pill-label {
+    color: rgba(180, 200, 240, 0.8);
+    font-weight: 500;
+  }
+
+  /* Dropdown inside pill */
+  .pill-dropdown {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: rgba(220, 225, 235, 1);
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .pill-select:hover {
+  background-color: rgba(70, 130, 210, 0.25);
+  } 
+
   /* ===== SSA Table ===== */
   .ssa-table {
     width: max-content;   /* 👈 key fix */
@@ -298,7 +356,6 @@
     color: rgba(140, 150, 170, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    white-space: nowrap;
   }
 
   .ssa-table-row {
@@ -319,19 +376,25 @@
     vertical-align: top;
   }
 
-  /* Comment columns - wider with wrapping */
-  .col-crv-comment,
   .col-general-comments {
-    width: 220px;
+    width: 180px;
     min-width: 180px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
 
-    word-break: break-word;       /* ✅ ADD */
-    overflow-wrap: anywhere;      /* ✅ ADD */
+  .col-crv-comment {
+    width: 180px;
+    min-width: 180px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .col-ssa-comment {
-    width: 160px;
+    width: 20px;
     min-width: 120px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   /* Merged cells spanning all SSA rows */
@@ -440,7 +503,7 @@
   }
 
   .link-display:hover {
-    text-decoration: underline;
+    text-decoration: dotted underline;
   }
 
   .link-edit-btn {
@@ -541,7 +604,7 @@
 
   /* ===== Main Layout ===== */
   .app-main {
-    max-width: 2150px;
+    max-width: 2250px;
     margin: 0 auto;
     padding: 24px;
   }

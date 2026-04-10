@@ -19,6 +19,9 @@ export interface SSA {
 
 export interface Trust {
   id: string;
+  PM: string;
+  TL: string;
+  ConflLink: string;
   globalExpanded?: boolean;
   trustName: string;
   trustNumber: string;
