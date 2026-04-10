@@ -51,7 +51,7 @@
 
   .app-container {
   min-height: 100vh;
-  background: rgb(66, 69, 78);
+  background: linear-gradient(180deg, rgb(37, 37, 37), rgb(37, 44, 64), rgb(19, 26, 47));
   }
 
   .app-header {
