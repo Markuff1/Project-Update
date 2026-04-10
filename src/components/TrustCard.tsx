@@ -262,7 +262,7 @@ export function TrustCard({
           </table>
 
           <div style={{ padding: '8px 16px', borderTop: '1px solid rgba(50, 55, 70, 0.5)' }}>
-            <button onClick={onAddSSA} className="add-ssa-btn">
+            <button onClick={onAddSSA} className="generalV2-btn">
               <Plus size={14} /> Add SSA
             </button>
           </div>

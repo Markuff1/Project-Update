@@ -3,7 +3,6 @@ import { useProjectData } from '@/hooks/useProjectData';
 import { TrustCard } from '@/components/TrustCard';
 import { ExcelUpload } from '@/components/ExcelUpload';
 import { Plus, HelpCircle } from 'lucide-react';
-import { TrustStatus } from '@/types/project';
 
 const Index = () => {
   const {
@@ -23,8 +22,8 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground animate-pulse">Loading...</p>
+      <div className="loading-screen">
+        <p className="loading-text">Loading...</p>
       </div>
     );
   }
@@ -39,7 +38,6 @@ const Index = () => {
     0
   );
 
-  // Trust status stats (from enum)
   const liveTrusts = trusts.filter(t => t.trustStatus === 'Live').length;
   const notLiveTrusts = trusts.filter(t => t.trustStatus === 'Not Live').length;
   const customerTestingTrusts = trusts.filter(
@@ -47,66 +45,34 @@ const Index = () => {
   ).length;
 
   const handleAddTrust = () => {
-  addTrust();
+    addTrust();
 
-  setTimeout(() => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: 'smooth'
-    });
-  }, 100);
-};
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 100);
+  };
 
   return (
     <div className="app-container">
       <header className="app-header">
-        <div
-          style={{
-            maxWidth: 2000,
-            margin: '0 auto',
-            padding: '16px 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
+        <div className="app-header-inner">
           {/* Left */}
           <div>
-            <h1
-              style={{
-                fontSize: 20,
-                fontWeight: 700,
-                color: 'rgba(220, 225, 235, 1)',
-                letterSpacing: '-0.01em'
-              }}
-            >
-              Project Testing Tracker
-            </h1>
-            <p
-              style={{
-                fontSize: 12,
-                color: 'rgba(140, 150, 170, 0.8)',
-                marginTop: 2
-              }}
-            >
+            <h1 className="app-title">Project Testing Tracker</h1>
+            <p className="app-subtitle">
               {trusts.length} Trust{trusts.length !== 1 ? 's' : ''} · {totalSSAs} SSA
               {totalSSAs !== 1 ? 's' : ''}
             </p>
           </div>
 
           {/* Right */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            {/* Trust Status Stats */}
+          <div className="app-header-actions">
+            {/* Trust Stats */}
             <div className="trust-header-stats">
-              <div
-                style={{
-                  fontSize: 12,
-                  color: 'rgba(140, 150, 170, 0.8)',
-                  marginBottom: 4
-                }}
-              >
-                Trusts:
-              </div>
+              <div className="stats-label">Trusts:</div>
 
               <span className="trust-stat">
                 <span className="trust-stat-value">{liveTrusts}</span>
@@ -130,15 +96,7 @@ const Index = () => {
 
             {/* SSA Stats */}
             <div className="trust-header-stats">
-              <div
-                style={{
-                  fontSize: 12,
-                  color: 'rgba(140, 150, 170, 0.8)',
-                  marginBottom: 4
-                }}
-              >
-                SSAs:
-              </div>
+              <div className="stats-label">SSAs:</div>
 
               <span className="trust-stat">
                 <span className="trust-stat-value">{completeSSAs}</span>
@@ -164,17 +122,17 @@ const Index = () => {
 
             <ExcelUpload onImport={importTrusts} />
 
-            <button onClick={handleAddTrust} className="add-trust-btn">
+            <button onClick={handleAddTrust} className="general-btn">
               <Plus size={20} />
             </button>
 
-            <button onClick={() => setShowHelp(true)} className="add-trust-btn">
+            <button onClick={() => setShowHelp(true)} className="general-btn">
               <HelpCircle size={20} />
             </button>
 
             <button
               onClick={() => setGlobalExpanded(prev => !prev)}
-              className="add-trust-btn"
+              className="general-btn"
               title={globalExpanded ? "Collapse all trusts" : "Expand all trusts"}
             >
               {globalExpanded ? "Collapse" : "Expand"}
@@ -183,27 +141,16 @@ const Index = () => {
         </div>
       </header>
 
-      <main style={{ maxWidth: 2150, margin: '0 auto', padding: '24px 24px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <main className="app-main">
+        <div className="trust-list">
           {trusts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '80px 0' }}>
-              <p
-                style={{
-                  color: 'rgba(140, 150, 170, 0.8)',
-                  marginBottom: 16
-                }}
-              >
+            <div className="empty-state">
+              <p className="empty-text">
                 No trusts yet. Add your first trust or upload an Excel file.
               </p>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 12
-                }}
-              >
-                <button onClick={addTrust} className="add-trust-btn" title="Add a new trust">
+
+              <div className="empty-actions">
+                <button onClick={addTrust} className="general-btn">
                   Add Trust
                 </button>
                 <ExcelUpload onImport={importTrusts} />
@@ -230,51 +177,22 @@ const Index = () => {
 
       {/* Help Modal */}
       {showHelp && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 50
-          }}
-          onClick={() => setShowHelp(false)}
-        >
-          <div
-            style={{
-              background: '#1e1f26',
-              padding: 24,
-              borderRadius: 12,
-              maxWidth: 600,
-              width: '90%'
-            }}
-            onClick={e => e.stopPropagation()}
-          >
-            <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>
+        <div className="modal-overlay" onClick={() => setShowHelp(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <h2 className="modal-title">
               How to use the Project Testing Tracker
             </h2>
 
-            <ul
-              style={{
-                fontSize: 14,
-                lineHeight: 1.6,
-                color: 'rgba(220,225,235,0.85)'
-              }}
-            >
-              <li>To Add a Trust using the “+" button and in there you can change the name, add SSAs and change status</li>
-              <li>Edit fields inline by clicking into cells.</li>
-              <li>Use SSA Status and CRV Status dropdowns to track progress.</li>
-              <li>Use Trust Status to classify overall progress.</li>
-              <li>Delete SSAs or Trusts using the trash icons.</li>
+            <ul className="modal-list">
+              <li>To Add a Trust using the "+" button</li>
+              <li>Edit fields inline by clicking into cells</li>
+              <li>Use SSA Status and CRV Status dropdowns</li>
+              <li>Use Trust Status to classify progress</li>
+              <li>Delete SSAs or Trusts using the trash icons</li>
             </ul>
 
-            <div style={{ marginTop: 16, textAlign: 'right' }}>
-              <button
-                onClick={() => setShowHelp(false)}
-                className="add-trust-btn"
-              >
+            <div className="modal-footer">
+              <button onClick={() => setShowHelp(false)} className="general-btn">
                 Close
               </button>
             </div>

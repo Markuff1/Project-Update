@@ -132,18 +132,20 @@ export function ExcelUpload({ onImport }: ExcelUploadProps) {
       />
 
       <button
-        onClick={() => fileInputRef.current?.click()}
-        className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
+        onClick={downloadTemplate}
+        className="download-temp-btn"
       >
-        <Upload size={16} />
+        <Download size={16} />
+        Template
       </button>
 
       <button
-        onClick={downloadTemplate}
-        className="flex items-center gap-2 border border-border text-muted-foreground px-4 py-2 rounded-md text-sm font-medium hover:text-foreground hover:border-foreground/30 transition-colors"
+        onClick={() => fileInputRef.current?.click()}
+        className="general-btn"
       >
-        <Download size={16} /> Template
+        <Upload size={20} />
       </button>
+
     </div>
   );
 }
