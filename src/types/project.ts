@@ -1,5 +1,5 @@
 export type TrustStatus = 'Live' | 'Customer Testing' | 'Not Live';
-export type SSAStatus = 'Complete' | 'In Progress' | 'Not Tested';
+export type SSAStatus = 'Complete' | 'In Progress' | 'Not Tested Yet' | 'Not Needed';
 export type CRVStatus = 'Complete' | 'In Progress' | 'Not Tested';
 
 export interface SSA {

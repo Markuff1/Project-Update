@@ -117,7 +117,7 @@ const Index = () => {
                 <span className="trust-stat-value">
                   {totalSSAs - completeSSAs - inProgressSSAs}
                 </span>
-                <span className="trust-stat-label">Not Tested</span>
+                <span className="trust-stat-label">Not Tested Yet</span>
               </span>
             </div>
 

@@ -16,7 +16,7 @@ interface TrustCardProps {
 }
 
 const PM_OPTIONS = ['Channa Punchihewa','Lee McGovern'];
-const TL_OPTIONS = ['Stuart Lawrie','Simon Haynes'];
+const TL_OPTIONS = ['Stuart Lawrie','Simon Haynes', 'Adam Taylor'];
 
 const trustStatusOptions: TrustStatus[] = ['Live', 'Customer Testing', 'Not Live'];
 
@@ -90,7 +90,7 @@ export function TrustCard({
 
           {/* RIGHT META (still LEFT section, before stats) */}
           <div className="trust-meta-fields">
-            <div className="pill-select">
+            <div className={`pill-select ${!trust.PM ? 'pill-select--empty' : ''}`}>
               <span className="pill-label">PM:</span>
               <select
                 value={trust.PM || ''}
@@ -104,7 +104,7 @@ export function TrustCard({
               </select>
             </div>
 
-            <div className="pill-select">
+            <div className={`pill-select ${!trust.TL ? 'pill-select--empty' : ''}`}>
               <span className="pill-label">Tech Lead:</span>
               <select
                 value={trust.TL || ''}
@@ -167,7 +167,7 @@ export function TrustCard({
 
             <span className="trust-stat">
               <span className="trust-stat-value">
-                {trust.ssas.filter(s => s.ssaStatus === 'Not Tested').length}
+                {trust.ssas.filter(s => s.ssaStatus === 'Not Tested Yet').length}
               </span>
               <span className="trust-stat-label">Not Tested</span>
             </span>
@@ -289,7 +289,7 @@ export function TrustCard({
                     />
                   </td>
 
-                  <td>
+                  <td className="col-ssa-comment">
                     <EditableCell
                       value={ssa.ssaComment}
                       onChange={v => onUpdateSSA(ssa.id, { ssaComment: v })}

@@ -25,7 +25,7 @@ const createEmptySSA = (): SSA => ({
   testSuiteLink: '',
   data: '',
   documents: false,
-  ssaStatus: 'Not Tested',
+  ssaStatus: 'Not Tested Yet',
   ssaComment: '',
   crvStatus: 'Not Tested',
 });

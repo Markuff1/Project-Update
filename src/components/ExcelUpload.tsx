@@ -11,7 +11,7 @@ const generateId = () => crypto.randomUUID();
 
 const validSSAStatus = (v: string): SSAStatus => {
   if (v === 'Complete' || v === 'In Progress') return v;
-  return 'Not Tested';
+  return 'Not Tested Yet';
 };
 
 const validCRVStatus = (v: string): CRVStatus => {

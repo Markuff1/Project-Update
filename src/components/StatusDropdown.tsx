@@ -7,13 +7,14 @@ interface StatusDropdownProps {
   onChange: (value: StatusType) => void;
 }
 
-const options: StatusType[] = ['Complete', 'In Progress', 'Not Tested'];
+const options: StatusType[] = ['Complete', 'In Progress', 'Not Tested Yet','Not Needed'];
 
 const statusClass = (status: StatusType) => {
   switch (status) {
     case 'Complete': return 'status-complete';
     case 'In Progress': return 'status-in-progress';
-    case 'Not Tested': return 'status-not-tested';
+    case 'Not Tested Yet': return 'status-not-tested';
+    case 'Not Needed': return 'status-Not-Needed';
   }
 };
 
