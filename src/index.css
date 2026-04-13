@@ -607,7 +607,6 @@
   }
 
   .link-edit-btn {
-    opacity: 0;
     color: rgba(140, 150, 170, 0.8);
     font-size: 12px;
     margin-left: 4px;
@@ -625,24 +624,48 @@
     color: rgba(220, 225, 235, 1);
   }
 
-  .trust-number-field {
-    font-family: 'JetBrains Mono', monospace;
-    color: rgba(220, 225, 235, 0.7);
-  }
-
   .trust-name-field {
-.trust-name-field {
-  font-weight: 600;
-  font-size: 16px;
-  color: rgba(220, 225, 235, 1);
+    font-weight: 700;
+    font-size: 16px;
+    color: rgba(220, 225, 235, 1);
 
-  /* ✅ FIX WIDTH BEHAVIOUR */
-  max-width: 260px;        /* 👈 stops it taking over */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+    /* ✅ FIX WIDTH BEHAVIOUR */
+    max-width: 260px;        /* 👈 stops it taking over */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
+
+  /* =========================
+   Chrome / Edge / Safari
+   ========================= */
+::-webkit-scrollbar {
+    height: 10px;   /* horizontal scrollbar height */
+    width: 10px;    /* vertical scrollbar width */
+}
+
+::-webkit-scrollbar-track {
+    background: #1e1e1e;   /* track colour */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4a90e2;   /* thumb colour */
+    border-radius: 10px;
+    border: 2px solid #1e1e1e; /* gives a nice padded look */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6aa9ff;
+}
+
+/* =========================
+   Firefox
+   ========================= */
+* {
+    scrollbar-width: thin; /* auto | thin */
+    scrollbar-color: #4a90e2 #1e1e1e; /* thumb track */
+}
 
   .ssa-number-field {
     font-family: 'JetBrains Mono', monospace;
