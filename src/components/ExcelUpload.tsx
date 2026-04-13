@@ -16,7 +16,7 @@ const validSSAStatus = (v: string): SSAStatus => {
 
 const validCRVStatus = (v: string): CRVStatus => {
   if (v === 'Complete' || v === 'In Progress') return v;
-  return 'Not Tested';
+  return 'Not Tested Yet';
 };
 
 const validTrustStatus = (v: string): TrustStatus => {

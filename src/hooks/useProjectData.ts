@@ -27,7 +27,7 @@ const createEmptySSA = (): SSA => ({
   documents: false,
   ssaStatus: 'Not Tested Yet',
   ssaComment: '',
-  crvStatus: 'Not Tested',
+  crvStatus: 'Not Tested Yet',
 });
 
 const createEmptyTrust = (): Trust => ({
@@ -140,7 +140,22 @@ export function useProjectData() {
     setTrusts(prev => {
       const updated = prev.map(t => {
         if (t.id !== trustId) return t;
-        return { ...t, ssas: [...t.ssas, createEmptySSA()] };
+
+        // Get numeric trust ID (e.g. "3")
+        const trustNumber = t.trustNumber;
+
+        // Count existing SSAs for this trust
+        const nextIndex = t.ssas.length + 1;
+
+        const newSSA: SSA = {
+          ...createEmptySSA(),
+          ssaNumber: `${trustNumber}.${nextIndex}`,
+        };
+
+        return {
+          ...t,
+          ssas: [...t.ssas, newSSA],
+        };
       });
 
       const trust = updated.find(t => t.id === trustId);
